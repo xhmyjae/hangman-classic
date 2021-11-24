@@ -9,11 +9,20 @@ import (
 
 
 func (w *hangManData) inputLetter() {
+	fmt.Print("Tentatives précédentes : ")
+	for index, each := range w.Tried {
+		if index == len(w.Tried)-1 {
+			fmt.Println(each)
+		} else {
+			fmt.Print(each, " - ")
+		}
+	}
+	fmt.Println("Tentatives restantes : ", 10-w.Attempts, "/10")
 	fmt.Println(w.HiddenWord)
-	fmt.Println("Mettre une lettre :")
+	fmt.Print("Mettre une lettre : ")
 	INletter := bufio.NewScanner(os.Stdin)
 	INletter.Scan()
-	letter := INletter.Text()
+	letter := Capitalize(INletter.Text())
 
 	if len(letter) > 1 {
 		fmt.Println("Une seule lettre est requise.")
@@ -31,6 +40,7 @@ func (w *hangManData) checkTried(letter string) {
 	for _, each := range w.Tried {
 		if letter == each {
 			w.Attempts++
+			fmt.Println("La lettre est déjà dans le mot! Il te reste", 10-w.Attempts)
 			w.death()
 		}
 	}
@@ -40,13 +50,18 @@ func (w *hangManData) checkTried(letter string) {
 
 
 func (w *hangManData) revealLetter(letter string) {
+	var anyFound = false
 	for index, each := range w.ToFind {
 		if letter == string(each) {
 			w.HiddenWord[index] = letter
-			w.endGame()
+			anyFound = true
 		}
 	}
+	if anyFound {
+		w.endGame()
+	}
 	w.Attempts++
+	fmt.Println("La lettre n'est pas dans le mot! Il te reste", 10-w.Attempts)
 	w.death()
 }
 
@@ -56,7 +71,6 @@ func (w *hangManData) death() {
 		fmt.Println("T'es mort bouffon.")
 		w.startGame()
 	} else {
-		fmt.Println("La lettre n'est pas dans le mot! Il te reste", 10-w.Attempts)
 		w.inputLetter()
 	}
 }
@@ -72,13 +86,14 @@ func (w *hangManData) endGame() {
 	}
 }
 
+
 func (w *hangManData) startGame() {
 	file := "words.txt"
-	word := readLine(file, 37)
+	word := Capitalize(readLine(file, 37))
 	w.Init(hideWord(word), word, 0, []string{}, []string{})
 	fmt.Println(word)
 	reveal := len(w.ToFind)/2-1
 	w.HiddenWord[reveal] = string(w.ToFind[reveal])
+	w.Tried = append(w.Tried, w.HiddenWord[reveal])
 	w.inputLetter()
-
 }
