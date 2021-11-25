@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"strings"
 )
 
 
@@ -17,9 +16,12 @@ func (w *hangManData) inputLetter() {
 			fmt.Print(each, " - ")
 		}
 	}
-	fmt.Println("Tentatives restantes : ", 10-w.Attempts, "/10")
-	fmt.Println(w.HiddenWord)
-	fmt.Print("Mettre une lettre : ")
+	fmt.Println("Tentatives restantes : ", 10-w.Attempts, "\n")
+	w.killJose()
+	for _, each := range w.HiddenWord {
+		fmt.Print(each, " ")
+	}
+	fmt.Print("\n\nMettre une lettre : ")
 	INletter := bufio.NewScanner(os.Stdin)
 	INletter.Scan()
 	letter := Capitalize(INletter.Text())
@@ -40,7 +42,7 @@ func (w *hangManData) checkTried(letter string) {
 	for _, each := range w.Tried {
 		if letter == each {
 			w.Attempts++
-			fmt.Println("La lettre est déjà dans le mot! Il te reste", 10-w.Attempts)
+			fmt.Println("La lettre est déjà dans le mot!")
 			w.death()
 		}
 	}
@@ -61,12 +63,13 @@ func (w *hangManData) revealLetter(letter string) {
 		w.endGame()
 	}
 	w.Attempts++
-	fmt.Println("La lettre n'est pas dans le mot! Il te reste", 10-w.Attempts)
+	fmt.Println("La lettre n'est pas dans le mot!")
 	w.death()
 }
 
 
 func (w *hangManData) death() {
+	fmt.Println("-------------")
 	if w.Attempts >= 10 {
 		fmt.Println("T'es mort bouffon.")
 		w.startGame()
@@ -76,24 +79,20 @@ func (w *hangManData) death() {
 }
 
 
-func (w *hangManData) endGame() {
-	notHidden := strings.Join(w.HiddenWord[:], "")
-	if notHidden == w.ToFind {
-		fmt.Println("GG, t'as trouvé le mot!")
-		w.startGame()
-	} else {
-		w.inputLetter()
+func (w *hangManData) killJose() {
+	file := "hangman.txt"
+	hangPos, _ := os.Open(file)
+	scanner := bufio.NewScanner(hangPos)
+
+	startLine := w.Attempts*7+1+1*w.Attempts
+	endLine := (w.Attempts+1)*7+w.Attempts*1
+
+	i:=1
+	for scanner.Scan() {
+		if i>=startLine && i<= endLine {
+			fmt.Println(scanner.Text())
+		}
+		i++
 	}
-}
-
-
-func (w *hangManData) startGame() {
-	file := "words.txt"
-	word := Capitalize(readLine(file, 37))
-	w.Init(hideWord(word), word, 0, []string{}, []string{})
-	fmt.Println(word)
-	reveal := len(w.ToFind)/2-1
-	w.HiddenWord[reveal] = string(w.ToFind[reveal])
-	w.Tried = append(w.Tried, w.HiddenWord[reveal])
-	w.inputLetter()
+	fmt.Println()
 }

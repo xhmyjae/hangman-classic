@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"math/rand"
 	"os"
-	"strings"
 )
 
 
@@ -36,13 +35,11 @@ func Capitalize(s string) string {
 }
 
 
-func lineCounter(file string) int {
-	scanner := bufio.NewScanner(strings.NewReader(file))
-
-	scanner.Split(bufio.ScanLines)
-
-	count := 0
-	for scanner.Scan() {
+func Counter(fil string) int {
+	file, _ := os.Open(fil)
+	scanner := bufio.NewScanner(file)
+	var count int
+	for scanner.Scan() { //while \n available
 		count++
 	}
 	return count
