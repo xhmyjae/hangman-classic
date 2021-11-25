@@ -28,9 +28,11 @@ func (w *hangManData) inputLetter() {
 
 	if len(letter) > 1 {
 		fmt.Println("Une seule lettre est requise.")
+		fmt.Println("-------------")
 		w.inputLetter()
 	} else if !IsLetter(letter) {
 		fmt.Println("Seules les lettres sont acceptées comme réponse.")
+		fmt.Println("-------------")
 		w.inputLetter()
 	} else {
 		w.checkTried(letter)
