@@ -8,16 +8,17 @@ import (
 
 
 func (w *hangManData) inputLetter() {
+	fmt.Println("\n***********")
+	w.killJose()
 	fmt.Print("Tentatives précédentes : ")
 	for index, each := range w.Tried {
 		if index == len(w.Tried)-1 {
-			fmt.Println(each)
+			fmt.Print(each)
 		} else {
 			fmt.Print(each, " - ")
 		}
 	}
-	fmt.Println("Tentatives restantes : ", 10-w.Attempts, "\n")
-	w.killJose()
+	fmt.Println("\nTentatives restantes : ", 10-w.Attempts, "\n")
 	for _, each := range w.HiddenWord {
 		fmt.Print(each, " ")
 	}
@@ -27,12 +28,12 @@ func (w *hangManData) inputLetter() {
 	letter := Capitalize(INletter.Text())
 
 	if len(letter) > 1 {
+		clear()
 		fmt.Println("Une seule lettre est requise.")
-		fmt.Println("-------------")
 		w.inputLetter()
 	} else if !IsLetter(letter) {
+		clear()
 		fmt.Println("Seules les lettres sont acceptées comme réponse.")
-		fmt.Println("-------------")
 		w.inputLetter()
 	} else {
 		w.checkTried(letter)
@@ -44,7 +45,8 @@ func (w *hangManData) checkTried(letter string) {
 	for _, each := range w.Tried {
 		if letter == each {
 			w.Attempts++
-			fmt.Println("La lettre est déjà dans le mot!")
+			clear()
+			fmt.Printf("La lettre %v est déjà dans le mot!\n", letter)
 			w.death()
 		}
 	}
@@ -62,19 +64,20 @@ func (w *hangManData) revealLetter(letter string) {
 		}
 	}
 	if anyFound {
+		clear()
 		w.endGame()
 	}
 	w.Attempts++
-	fmt.Println("La lettre n'est pas dans le mot!")
+	clear()
+	fmt.Printf("La lettre %v n'est pas dans le mot!\n", letter)
 	w.death()
 }
 
 
 func (w *hangManData) death() {
-	fmt.Println("-------------")
 	if w.Attempts >= 10 {
-		fmt.Println("T'es mort bouffon.")
-		w.startGame()
+		fmt.Printf("\nTu as tué Josè!!! Sa famille et son chien attendront son retour pour toujours...\nPS : Le mot était %v\n", w.ToFind)
+		w.restart()
 	} else {
 		w.inputLetter()
 	}

@@ -9,7 +9,7 @@ import (
 
 func IsLetter(s string) bool {
 	if len(s) == 0 {
-		return true
+		return false
 	} else {
 		for _, cara := range s {
 			if !(rune('a') <= cara && cara <= rune('z') || rune('A') <= cara && cara <= rune('Z')) {
@@ -69,4 +69,8 @@ func hideWord(word string) []string {
 		hiddenWord = append(hiddenWord, "_")
 	}
 	return hiddenWord
+}
+
+func clear() {
+	os.Stdout.WriteString("\x1b[3;J\x1b[H\x1b[2J")
 }
