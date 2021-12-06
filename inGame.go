@@ -103,6 +103,9 @@ func (w *hangManData) killJose() {
 
 func (w *hangManData) checkWord(word string) {
 	if word == w.ToFind {
+		for index, each := range w.ToFind {
+			w.HiddenWord[index] = string(each)
+		}
 		w.endGame()
 	} else {
 		w.Attempts += 2
