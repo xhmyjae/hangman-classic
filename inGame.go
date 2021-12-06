@@ -122,8 +122,8 @@ func (w *hangManData) checkWord(word string) {
 				onlyLetters = false
 			}
 		}
-		w.Attempts += 2
 		if onlyLetters {
+			w.Attempts += 2
 			fmt.Printf("Le mot n'était pas %v!", word)
 		} else {
 			fmt.Println("Les caractères spéciaux ne sont pas acceptés comme réponse.")
