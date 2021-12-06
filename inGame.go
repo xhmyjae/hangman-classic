@@ -29,8 +29,7 @@ func (w *hangManData) inputLetter() {
 
 	if len(letter) > 1 {
 		clear()
-		fmt.Println("Une seule lettre est requise.")
-		w.inputLetter()
+		w.checkWord(letter)
 	} else if !IsLetter(letter) {
 		clear()
 		fmt.Println("Seules les lettres sont acceptées comme réponse.")
@@ -100,4 +99,14 @@ func (w *hangManData) killJose() {
 		i++
 	}
 	fmt.Println()
+}
+
+func (w *hangManData) checkWord(word string) {
+	if word == w.ToFind {
+		w.endGame()
+	} else {
+		w.Attempts += 2
+		fmt.Printf("Le mot n'était pas %v!", word)
+		w.death()
+	}
 }
