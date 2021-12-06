@@ -7,6 +7,7 @@ import (
 )
 
 
+// IsLetter will check if a letter is a special character or not
 func IsLetter(s string) bool {
 	if len(s) == 0 {
 		return false
@@ -21,6 +22,7 @@ func IsLetter(s string) bool {
 }
 
 
+// Capitalize will put the input letter in upper-case
 func Capitalize(s string) string {
 	var res string
 	for _, cara := range s {
@@ -35,6 +37,7 @@ func Capitalize(s string) string {
 }
 
 
+// Counter will count the amount of lines in a file
 func Counter(fil string) int {
 	file, _ := os.Open(fil)
 	scanner := bufio.NewScanner(file)
@@ -46,6 +49,7 @@ func Counter(fil string) int {
 }
 
 
+// readLine will read the text at a certain line specified in parameters
 func readLine(onefile string, ranNum int) string {
 	var word string
 	file, _ := os.Open(onefile)
@@ -62,6 +66,7 @@ func readLine(onefile string, ranNum int) string {
 }
 
 
+// hideWord will create a array with the letters of the "hidden" word in it
 func hideWord(word string) []string {
 	wordLen := len(word)
 	var hiddenWord []string
@@ -71,6 +76,8 @@ func hideWord(word string) []string {
 	return hiddenWord
 }
 
+
+// clear will delete all the text written in the terminal
 func clear() {
 	os.Stdout.WriteString("\x1b[3;J\x1b[H\x1b[2J")
 }

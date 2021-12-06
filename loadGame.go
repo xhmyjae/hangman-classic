@@ -8,6 +8,7 @@ import (
 )
 
 
+/* startGame will load as soon as the program starts */
 func (w *hangManData) startGame() {
 	clear()
 	fmt.Print("  ______ _     __                                         _             _              _            __  \n")
@@ -26,6 +27,7 @@ func (w *hangManData) startGame() {
 }
 
 
+/* endGame will check if the word the expected word, if so the game will end and allows the restart */
 func (w *hangManData) endGame() {
 	notHidden := strings.Join(w.HiddenWord[:], "")
 	if notHidden == w.ToFind {
@@ -37,6 +39,7 @@ func (w *hangManData) endGame() {
 }
 
 
+/* restart will offer the possibility to play once again or leave the game */
 func (w *hangManData) restart() {
 	fmt.Println("\nAppuie sur 1 pour recommencer, ou sur 2 pour quitter.")
 

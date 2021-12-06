@@ -7,6 +7,8 @@ import (
 )
 
 
+/* inputLetter display information such as the amount of attempts left and the letters already input, and it allows the user to input text (letters/word).
+It will also load the function linked with the input */
 func (w *hangManData) inputLetter() {
 	fmt.Println("\n***********")
 	w.killJose()
@@ -32,7 +34,7 @@ func (w *hangManData) inputLetter() {
 		w.checkWord(letter)
 	} else if !IsLetter(letter) {
 		clear()
-		fmt.Println("Seules les lettres sont acceptées comme réponse.")
+		fmt.Println("Les caractères spéciaux ne sont pas acceptés comme réponse.")
 		w.inputLetter()
 	} else {
 		w.checkTried(letter)
@@ -40,6 +42,7 @@ func (w *hangManData) inputLetter() {
 }
 
 
+/* checkTried will check if the input letter has already been said by the user */
 func (w *hangManData) checkTried(letter string) {
 	for _, each := range w.Tried {
 		if letter == each {
@@ -54,6 +57,7 @@ func (w *hangManData) checkTried(letter string) {
 }
 
 
+/* revealLetter will display the letter said if it's in the word, if not it will increase the attempts and load the death function */
 func (w *hangManData) revealLetter(letter string) {
 	var anyFound = false
 	for index, each := range w.ToFind {
@@ -73,6 +77,7 @@ func (w *hangManData) revealLetter(letter string) {
 }
 
 
+ /* death will check if the attempts are higher or equal to 10, if so it'll end the game and load the restart function, if not the game continue */
 func (w *hangManData) death() {
 	if w.Attempts >= 10 {
 		fmt.Printf("\nTu as tué Josè!!! Sa famille et son chien attendront son retour pour toujours...\nPS : Le mot était %v\n", w.ToFind)
@@ -83,6 +88,7 @@ func (w *hangManData) death() {
 }
 
 
+/* killJose will display the hangman, it changes depending on the attempts number thanks to the startLine and endLine variables */
 func (w *hangManData) killJose() {
 	file := "hangman.txt"
 	hangPos, _ := os.Open(file)
@@ -101,6 +107,8 @@ func (w *hangManData) killJose() {
 	fmt.Println()
 }
 
+
+/* checkWord will load if the users input is a word. It will check if it's the expected word or not */
 func (w *hangManData) checkWord(word string) {
 	if word == w.ToFind {
 		for index, each := range w.ToFind {
@@ -108,8 +116,18 @@ func (w *hangManData) checkWord(word string) {
 		}
 		w.endGame()
 	} else {
+		onlyLetters := true
+		for _, each := range word {
+			if !IsLetter(string(each)) {
+				onlyLetters = false
+			}
+		}
 		w.Attempts += 2
-		fmt.Printf("Le mot n'était pas %v!", word)
+		if onlyLetters {
+			fmt.Printf("Le mot n'était pas %v!", word)
+		} else {
+			fmt.Println("Les caractères spéciaux ne sont pas acceptés comme réponse.")
+		}
 		w.death()
 	}
 }

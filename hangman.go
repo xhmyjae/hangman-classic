@@ -8,6 +8,7 @@ type hangManData struct {
 	Position []string
 }
 
+// Init allows to initialize the hangman struct more easily
 func (w *hangManData) Init(HiddenWord []string, ToFind string, Attempts int, Tried []string, Position []string) {
 	w.HiddenWord = HiddenWord
 	w.ToFind = ToFind
